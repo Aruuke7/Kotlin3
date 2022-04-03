@@ -3,6 +3,7 @@ package kg.geektech.kotlin3.main
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.view.LayoutInflater
 import androidx.activity.result.ActivityResultLauncher
@@ -11,11 +12,11 @@ import androidx.recyclerview.widget.GridLayoutManager
 import kg.geektech.kotlin3.base.BaseActivity
 import kg.geektech.kotlin3.databinding.ActivityMainBinding
 
+
 class MainActivity : BaseActivity<ActivityMainBinding>() {
     private lateinit var registerForActivityResult: ActivityResultLauncher<Intent>
     private val adapter = MainAdapter()
     private val imagesUri = mutableListOf<Uri>()
-
 
     override fun showInternet() {
     }
@@ -33,11 +34,16 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     override fun initListener() {
 
         binding.btnSelect.setOnClickListener {
-            val intent = Intent(Intent.ACTION_PICK)
-            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE,true)
-            intent.type = "image/*"
-            registerForActivityResult.launch(intent)
-            supportActionBar?.title = "Выбранные фотографии"
+            if(checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE)==PackageManager.PERMISSION_DENIED){
+                val permissions = arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE)
+                requestPermissions(permissions,1000)
+            }else{
+                val intent = Intent(Intent.ACTION_PICK)
+                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE,true)
+                intent.type = "image/*"
+                registerForActivityResult.launch(intent)
+                supportActionBar?.title = "Выбранные фотографии"
+            }
         }
 
         registerForActivityResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()

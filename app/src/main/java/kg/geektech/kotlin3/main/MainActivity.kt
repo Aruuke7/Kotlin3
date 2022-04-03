@@ -42,7 +42,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                 intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE,true)
                 intent.type = "image/*"
                 registerForActivityResult.launch(intent)
-                supportActionBar?.title = "Выбранные фотографии"
+                imagesUri.clear()
             }
         }
 
@@ -59,6 +59,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                         }
                     }
                     adapter.acceptImages(imagesUri)
+                    supportActionBar?.title = "Выбранные фотографии"
+
                 }
             }
         }

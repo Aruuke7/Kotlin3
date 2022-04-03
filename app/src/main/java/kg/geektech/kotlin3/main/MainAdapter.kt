@@ -1,28 +1,29 @@
 package kg.geektech.kotlin3.main
 
-import android.content.Intent
+import android.annotation.SuppressLint
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import kg.geektech.kotlin3.Image
 import kg.geektech.kotlin3.R
 import kg.geektech.kotlin3.databinding.ItemRecyclerBinding
 
 class MainAdapter: RecyclerView.Adapter<MainAdapter.ViewHolder>() {
-    private val images = mutableListOf<Image>()
+    private var images = mutableListOf<Uri>()
 
-
-        fun asseptImages(image: Intent?){
-            images.add(image)
+        @SuppressLint("NotifyDataSetChanged")
+        fun acceptImages(image: MutableList<Uri>){
+            images = image
+            notifyDataSetChanged()
         }
 
     inner class ViewHolder(item: View):RecyclerView.ViewHolder(item) {
         private val binding= ItemRecyclerBinding.bind(item)
 
 
-        fun bind(image: Image) {
-            binding.ivImage.setImageResource(image.id)
+        fun bind(image: Uri) {
+            binding.ivImage.setImageURI(image)
         }
     }
 
@@ -40,6 +41,3 @@ class MainAdapter: RecyclerView.Adapter<MainAdapter.ViewHolder>() {
     }
 }
 
-private fun <E> MutableList<E>.add(element: Intent?) {
-
-}
